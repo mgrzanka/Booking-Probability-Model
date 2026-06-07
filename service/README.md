@@ -2,8 +2,8 @@
 
 Lokalny serwis FastAPI do predykcji prawdopodobieństwa rezerwacji. Każdy request trafia losowo (po `user_id`) do jednego z dwóch modeli:
 
-- **wariant A** -- model bazowy (regresja logistyczna),
-- **wariant B** -- model docelowy (najlepsza rodzina wyłoniona w konkursie modeli).
+- **wariant A** - model bazowy (regresja logistyczna),
+- **wariant B** - model docelowy (najlepsza rodzina wyłoniona w konkursie modeli).
 
 Nazwa modelu w odpowiedzi i logu jest odczytywana z zapisanego pipeline'u, więc zmiana zwycięzcy modelu B nie wymaga zmian w serwisie.
 
@@ -11,8 +11,8 @@ Nazwa modelu w odpowiedzi i logu jest odczytywana z zapisanego pipeline'u, więc
 
 Modele muszą być wcześniej zapisane jako samowystarczalne pipeline'y do `data/processed/`:
 
-- `model_a_pipeline.joblib` -- zapisywany przez `notebooks/02-feature_engineering.ipynb` (model bazowy A),
-- `model_b_pipeline.joblib` -- zapisywany przez `notebooks/03-modeling.ipynb` (model docelowy B).
+- `model_a_pipeline.joblib` - zapisywany przez `notebooks/02-feature_engineering.ipynb` (model bazowy A),
+- `model_b_pipeline.joblib` - zapisywany przez `notebooks/03-modeling.ipynb` (model docelowy B).
 
 Każdy pipeline zawiera kompletny preprocessing (imputacja + kodowanie + skalowanie) i klasyfikator, więc serwis nie potrzebuje osobnych enkoderów ani skalerów.
 
