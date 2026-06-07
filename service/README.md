@@ -2,19 +2,19 @@
 
 Lokalny serwis FastAPI do predykcji prawdopodobieństwa rezerwacji. Każdy request trafia losowo (po `user_id`) do jednego z dwóch modeli:
 
-- **wariant A** -- `LogisticRegression` (model bazowy),
-- **wariant B** -- `RandomForest` (model docelowy).
+- **wariant A** -- model bazowy (regresja logistyczna),
+- **wariant B** -- model docelowy (najlepsza rodzina wyłoniona w konkursie modeli).
+
+Nazwa modelu w odpowiedzi i logu jest odczytywana z zapisanego pipeline'u, więc zmiana zwycięzcy modelu B nie wymaga zmian w serwisie.
 
 ## Wymagania
 
-Modele muszą być wcześniej zapisane przez `notebooks/02-modeling.ipynb` do `data/processed/`:
+Modele muszą być wcześniej zapisane jako samowystarczalne pipeline'y do `data/processed/`:
 
-- `baseline_logreg_model.joblib`
-- `target_randomforest_model.joblib`
-- `onehot_encoder.joblib`
-- `standard_scaler.joblib`
-- `feature_columns.joblib`
-- `column_config.joblib`
+- `model_a_pipeline.joblib` -- zapisywany przez `notebooks/02-feature_engineering.ipynb` (model bazowy A),
+- `model_b_pipeline.joblib` -- zapisywany przez `notebooks/03-modeling.ipynb` (model docelowy B).
+
+Każdy pipeline zawiera kompletny preprocessing (imputacja + kodowanie + skalowanie) i klasyfikator, więc serwis nie potrzebuje osobnych enkoderów ani skalerów.
 
 ## Uruchomienie
 
@@ -23,6 +23,7 @@ Z katalogu `service` (po aktywacji `venv`):
 ```bash
 uvicorn app:app --reload --host 127.0.0.1 --port <numer portu>
 ```
+
 W przykładach numer portu ustawiony jest na 8000.
 
 Sprawdzenie zdrowia serwisu:
@@ -48,7 +49,11 @@ curl -X POST http://127.0.0.1:8000/predict \
     "accommodates": 2.0,
     "bathrooms": 1.0,
     "bedrooms": 1.0,
-    "neighbourhood_cleansed": "Vesterbro-Kongens Enghave"
+    "neighbourhood_cleansed": "Vesterbro-Kongens Enghave",
+    "host_is_superhost": "No",
+    "host_acceptance_rate": 90.0,
+    "minimum_nights": 3.0,
+    "minimum_maximum_nights": 365.0
   }'
 ```
 
@@ -85,4 +90,4 @@ Skrypt wysyła pierwsze N wierszy z `data/processed/inference_sample.csv` oraz d
 
 Po wygenerowaniu logu należy uruchomić notebook:
 
-`notebooks/03-ab_evaluation.ipynb`
+`notebooks/04-ab_evaluation.ipynb`

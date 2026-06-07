@@ -1,0 +1,19 @@
+# Core data / ML
+pandas
+numpy
+scikit-learn
+xgboost
+joblib
+
+# Sentiment analysis (preprocessing)
+vaderSentiment
+
+# Visualization (notebooks)
+matplotlib
+
+# Microservice
+fastapi
+uvicorn
+
+# Client / sample requests
+requests

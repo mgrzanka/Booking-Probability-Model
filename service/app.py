@@ -6,7 +6,7 @@ from pathlib import Path
 
 from fastapi import FastAPI
 
-from model_utils import MODEL_A_NAME, MODEL_B_NAME, ModelBundle, extract_feature_dict
+from model_utils import ModelBundle, extract_feature_dict
 from schemas import PredictRequest, PredictResponse
 
 app = FastAPI(title="Nocarz Reservation Prediction")
@@ -29,6 +29,10 @@ LOG_FIELDS = [
     "price",
     "property_type",
     "room_type",
+    "host_is_superhost",
+    "host_acceptance_rate",
+    "minimum_nights",
+    "minimum_maximum_nights",
     "Y",
 ]
 
@@ -69,6 +73,10 @@ def log_prediction(
         "price": payload.price,
         "property_type": payload.property_type,
         "room_type": payload.room_type,
+        "host_is_superhost": payload.host_is_superhost,
+        "host_acceptance_rate": payload.host_acceptance_rate,
+        "minimum_nights": payload.minimum_nights,
+        "minimum_maximum_nights": payload.minimum_maximum_nights,
         "Y": payload.Y,
     }
     with LOG_PATH.open("a", newline="", encoding="utf-8") as f:
@@ -89,10 +97,10 @@ def predict(payload: PredictRequest) -> PredictResponse:
 
     if model_variant == "A":
         probability = models.predict_variant_a(features)
-        model_name = MODEL_A_NAME
+        model_name = models.model_a_name
     else:
         probability = models.predict_variant_b(features)
-        model_name = MODEL_B_NAME
+        model_name = models.model_b_name
 
     log_prediction(request_id, payload, model_variant, model_name, probability)
 

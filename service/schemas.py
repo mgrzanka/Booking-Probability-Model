@@ -32,6 +32,10 @@ class PredictRequest(BaseModel):
     bedrooms: float = 1.0
     price: float = 0.0
     neighbourhood_cleansed: str = "Unknown"
+    host_is_superhost: str = "Unknown"
+    host_acceptance_rate: float = 90.0
+    minimum_nights: float = 1.0
+    minimum_maximum_nights: float = 365.0
 
     Y: Optional[int] = Field(
         default=None,
