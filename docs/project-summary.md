@@ -87,7 +87,7 @@ Z tabeli `Listings` dołączane są poprzez **inner join** (zachowywane są wył
 
 To daje łącznie **28 cech wejściowych** (24 numeryczne + 4 kategorialne), które po kodowaniu one-hot rozszerzają się do ok. 53 kolumn. Braki w numerycznych cechach oferty (`price`, `bedrooms`, `bathrooms`, `host_acceptance_rate`) uzupełnia imputacja, której strategię (mediana vs `IterativeImputer`) wybieramy empirycznie po Average Precision w walidacji krzyżowej. Szczegóły także zawarliśmy w [`model-report.md`](model-report.md).
 
-#### Świadome pominięcie cech z przecieku (data leakage)
+#### Pominięcie cech z przecieku
 
 Według naszej analizy (notatnik 00-eda), tabela `Listings` jest snapshotem z momentu pobrania danych, czyli z przyszłości względem analizowanych sesji. Dlatego kolumny zależne od późniejszych rezerwacji i recenzji (`review_scores_*`, `number_of_reviews*`, `reviews_per_month`, `availability_*`, `estimated_*`, `first/last_review` itd.) zostały odrzucone, mimo że są silnie skorelowane z `Y`. Wykorzystujemy wyłącznie atrybuty stabilne w czasie (typ, lokalizacja, pojemność, cena) oraz polityki/charakterystykę gospodarza (`host_is_superhost`, `host_acceptance_rate`, `minimum_nights`, `minimum_maximum_nights`), które w analizie EDA okazały się najsilniejsze. Natomiast, jak już zostało to wspomniane, sygnał recenzji budujemy samodzielnie, punktowo w czasie (VADER + reguła D+1).
 
@@ -95,12 +95,12 @@ Według naszej analizy (notatnik 00-eda), tabela `Listings` jest snapshotem z mo
 
 Projekt wykorzystuje zbiory danych z katalogu `data/raw/`:
 
-| Tabela         | Wiersze | Kluczowe kolumny                                                                                                                 | Opis                                                                             |
-| -------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
-| `sessions.csv` | 470 445 | `user_id`, `timestamp`, `listing_id`, `action`                                                                                   | Logi sesji użytkowników (view_listing, book_listing, search i inne)              |
-| `reviews.csv`  | 46 935  | `listing_id`, `date`, `comments`                                                                                                 | Recenzje tekstowe z datą publikacji (ziarnistość dzienna)                        |
-| `listings.csv` | 3 646   | `id`, `property_type`, `room_type`, `accommodates`, `bathrooms_text`, `bedrooms`, `price`, `neighbourhood_cleansed` + ~70 innych | Snapshot ofert z atrybutami statycznymi                                          |
-| `users.csv`    | -       | -                                                                                                                                | Dostępny, ale nieużywany w modelu (brak cech istotnych dla predykcji rezerwacji) |
+| Tabela         | Wiersze | Kluczowe kolumny                                                                                                                 | Opis                                                                               |
+| -------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| `sessions.csv` | 470 445 | `user_id`, `timestamp`, `listing_id`, `action`                                                                                   | Logi sesji użytkowników (view_listing, book_listing, search i inne)                |
+| `reviews.csv`  | 46 935  | `listing_id`, `date`, `comments`                                                                                                 | Recenzje tekstowe z datą publikacji (ziarnistość dzienna)                          |
+| `listings.csv` | 3 646   | `id`, `property_type`, `room_type`, `accommodates`, `bathrooms_text`, `bedrooms`, `price`, `neighbourhood_cleansed` + ~70 innych | Snapshot ofert z atrybutami statycznymi                                            |
+| `users.csv`    | -       | -                                                                                                                                | Dostępny, ale nieużywany w modelu (predykcja tylko na podstawie oferty i recenzji) |
 
 ## 6. Ocena wystarczalności danych
 
