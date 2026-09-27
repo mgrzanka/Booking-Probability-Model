@@ -96,4 +96,10 @@ python sample_requests.py --n 30 --with-labels 50
 
 **Stack:** Python · pandas · scikit-learn · XGBoost · vaderSentiment · FastAPI · Jupyter
 
+## Data
+
+The session, review and listing CSVs are distributed by the course and are **not redistributed here**. Place them in `data/raw/` and run notebooks `00 → 03` to regenerate `data/interim/` and `data/processed/training_data.csv`.
+
+What is committed: the two trained pipelines (`model_a_pipeline.joblib`, `model_b_pipeline.joblib`), the inference sample used by `service/sample_requests.py`, and the inference predictions — everything needed to run the microservice and the A/B evaluation without the full dataset.
+
 **Full documentation (PL):** [`docs/project-summary.md`](docs/project-summary.md) — problem, success criteria, feature design · [`docs/model-report.md`](docs/model-report.md) — modelling process and results · [`service/README.md`](service/README.md) — API reference

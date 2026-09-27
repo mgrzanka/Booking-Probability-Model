@@ -1,2 +1,9 @@
 .venv
 __pycache__
+
+# Course-distributed datasets - not redistributed.
+# Place the raw CSVs in data/raw/ and run notebooks 00 -> 03 to regenerate the rest.
+data/raw/
+data/interim/
+data/processed/training_data.csv
+service/ab_logs/
